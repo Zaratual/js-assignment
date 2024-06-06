@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact List</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* Add custom styles here if needed */
+    .container {
+  max-width: 500px;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    
+    <form id="contactForm">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" placeholder="Enter Name">
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" placeholder="Enter Email">
+      </div>
+      <button type="submit" class="btn btn-primary">Add Contact</button>
+    </form>
+    <ul id="contactList" class="list-group mt-3">
+      <!-- Contacts will be dynamically added here -->
+    </ul>
+  </div>
+
+  <!-- Bootstrap JS and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    // Array to store contacts
+    let contacts = [];
+
+    // Function to add contact
+    function addContact(name, email) {
+      contacts.push({ name, email });
+      updateContactList();
+    }
+
+    // Function to update contact list
+    function updateContactList() {
+      const contactList = document.getElementById('contactList');
+      contactList.innerHTML = '';
+      contacts.forEach((contact, index) => {
+        const listItem = document.createElement('li');
+        listItem.className = 'list-group-item';
+        listItem.innerHTML = `
+          ${contact.name} - ${contact.email}
+          <button type="button" class="btn btn-info btn-sm mx-2" onclick="editContact(${index})">Edit</button>
+          <button type="button" class="btn btn-danger btn-sm" onclick="removeContact(${index})">Delete</button>
+        `;
+        contactList.appendChild(listItem);
+      });
+    }
+
+    // Function to edit contact
+    function editContact(index) {
+      const contact = contacts[index];
+      const name = prompt('Enter new name:', contact.name);
+      const email = prompt('Enter new email:', contact.email);
+      if (name && email) {
+        contacts[index] = { name, email };
+        updateContactList();
+      }
+    }
+
+    // Function to remove contact
+    function removeContact(index) {
+      contacts.splice(index, 1);
+      updateContactList();
+    }
+
+    // Event listener for form submission
+    document.getElementById('contactForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      if (name && email) {
+        addContact(name, email);
+        document.getElementById('contactForm').reset();
+      } else {
+        alert('Please fill out all fields!');
+      }
+    });
+  </script>
+</body>
+</html>
